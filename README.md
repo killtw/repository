@@ -11,3 +11,16 @@ or add this to require section in your composer.json file:
 ```
 "killtw/repository": "1.*"
 ```
+And then, include the service provider whthin `config/app.php`
+```php
+'providers' => [
+    Ontoo\Repository\Providers\RepositoryServiceProvider::class,
+];
+```
+
+## Usage
+### Create a repository
+Create repositories through generator.
+```bash
+$ php artisan make:repository UserRepository
+```

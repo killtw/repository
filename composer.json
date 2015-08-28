@@ -28,5 +28,6 @@
             "src/Killtw/Repository/helper.php"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
