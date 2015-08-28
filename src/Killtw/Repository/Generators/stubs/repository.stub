@@ -1,0 +1,59 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use $MODEL$;
+use Killtw\Repository\Contracts\Presentable;
+use Killtw\Repository\Criteria\RequestCriteria;
+use Killtw\Repository\Eloquent\BaseRepository;
+$PRESENTER$
+
+/**
+ * Class $CLASS$Repository
+ *
+ * @package $NAMESPACE$
+ */
+class $CLASS$Repository extends BaseRepository implements Presentable
+{
+    /**
+     * Fields for RequestCriteria.
+     *
+     * @var array
+     */
+    protected $searchableFields = [];
+
+    /**
+     * Relations for eagerLoading.
+     *
+     * @var array
+     */
+    protected $with = [];
+
+    /**
+     * Set model for repository.
+     *
+     * @return string
+     */
+    public function model()
+    {
+        return $CLASS$::class;
+    }
+
+    /**
+     * Boot the repository.
+     */
+    public function boot()
+    {
+        $this->pushCriteria(RequestCriteria::class);
+    }
+
+    /**
+     * Set presenter for reposiroty.
+     *
+     * @return mixed
+     */
+    public function presenter()
+    {
+        return $PRESENTERCLASS$;
+    }
+}

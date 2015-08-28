@@ -1,0 +1,32 @@
+{
+    "name": "killtw/repository",
+    "description": "Repository for Laravel 5",
+    "authors": [
+        {
+            "name": "Karl Li",
+            "email": "killtw@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "keywords": ["laravel", "eloquent", "repository"],
+    "require": {
+        "php": ">=5.4.0",
+        "league/fractal": "^0.12.0",
+        "illuminate/http": "~5.0|~5.1",
+        "illuminate/config": "~5.0|~5.1",
+        "illuminate/console": "~5.0|~5.1",
+        "illuminate/support": "~5.0|~5.1",
+        "illuminate/database": "~5.0|~5.1",
+        "illuminate/pagination": "~5.0|~5.1",
+        "prettus/laravel-validation": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Killtw\\Repository\\": "src/Killtw/Repository"
+        },
+        "files": [
+            "src/Killtw/Repository/helper.php"
+        ]
+    },
+    "minimum-stability": "stable"
+}
