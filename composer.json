@@ -15,6 +15,7 @@
         "illuminate/http": "~5.0|~5.1",
         "illuminate/config": "~5.0|~5.1",
         "illuminate/console": "~5.0|~5.1",
+        "illuminate/routing": "~5.0|~5.1",
         "illuminate/support": "~5.0|~5.1",
         "illuminate/database": "~5.0|~5.1",
         "illuminate/pagination": "~5.0|~5.1",
