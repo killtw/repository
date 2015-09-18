@@ -261,7 +261,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         if (! is_null($this->validator)) {
             $this->validator
                 ->with($data)
-                ->passOrFail(ValidatorInterface::RULE_CREATE);
+                ->passesOrFail(ValidatorInterface::RULE_CREATE);
         }
 
         $results = $this->model->create($data);
@@ -288,7 +288,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         if (! is_null($this->validator)) {
             $this->validator
                 ->with($data)
-                ->passOrFail(ValidatorInterface::RULE_UPDATE);
+                ->passesOrFail(ValidatorInterface::RULE_UPDATE);
         }
 
         $results = $this->model->where($field, $id)->update($data);
