@@ -3,6 +3,7 @@
 namespace Killtw\Repository\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container as App;
 use Killtw\Repository\Contracts\CriteriaInterface;
@@ -12,6 +13,7 @@ use Killtw\Repository\Contracts\RepositoryInterface;
 use Killtw\Repository\Contracts\RepositoryPresenterInterface;
 use Killtw\Repository\Exceptions\RepositoryException;
 use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class BaseRepository
@@ -65,6 +67,8 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     protected $validator;
 
     /**
+     * Rules for validation.
+     *
      * @var null
      */
     protected $rules = null;
@@ -175,6 +179,41 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     }
 
     /**
+     * Execute validation.
+     *
+     * @param array $data
+     * @param array|string $rule
+     */
+    protected function validate(array $data, $rule)
+    {
+        try {
+            if (! is_null($this->validator)) {
+                $this->validator
+                    ->with($data)
+                    ->passesOrFail($rule);
+            }
+        } catch (ValidatorException $e) {
+            $this->validationFail($e);
+        }
+    }
+
+    /**
+     * If validation failed, redirect to previous page.
+     *
+     * @param ValidatorException $error
+     */
+    protected function validationFail(ValidatorException $error)
+    {
+        $redirector = $this->app->make(\Illuminate\Routing\Redirector::class);
+
+        throw new HttpResponseException(
+            $redirector->to($redirector->getUrlGenerator()->previous())
+                ->withInput()
+                ->withErrors($error->getMessageBag(), 'default')
+        );
+    }
+
+    /**
      * @param null $presenter
      *
      * @return null|PresenterInterface
@@ -184,7 +223,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
     {
         $presenter = (! is_null($presenter)) ? $presenter : $this->presenter();
 
-        if ( ! is_null($presenter)) {
+        if (! is_null($presenter)) {
             $this->presenter = $this->app->make($presenter);
 
             if (! $this->presenter instanceof PresenterInterface) {
@@ -258,11 +297,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
      */
     public function create(array $data)
     {
-        if (! is_null($this->validator)) {
-            $this->validator
-                ->with($data)
-                ->passesOrFail(ValidatorInterface::RULE_CREATE);
-        }
+        $this->validate($data, ValidatorInterface::RULE_CREATE);
 
         $results = $this->model->create($data);
         $this->resetModel();
@@ -285,11 +320,7 @@ abstract class BaseRepository implements RepositoryInterface, RepositoryCriteria
         if (array_key_exists('_method', $data)) {
             unset($data['_method']);
         }
-        if (! is_null($this->validator)) {
-            $this->validator
-                ->with($data)
-                ->passesOrFail(ValidatorInterface::RULE_UPDATE);
-        }
+        $this->validate($data, ValidatorInterface::RULE_UPDATE);
 
         $results = $this->model->where($field, $id)->update($data);
         $this->resetModel();
